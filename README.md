@@ -177,3 +177,6 @@ to delete a specific article use app.delete() with model.deleteOne()
     })
   });
   ```
+
+
+`req.body.<something>` is values from user's request, while `req.params.<someRouteParams>` is simply what user typed in the browser address bar.

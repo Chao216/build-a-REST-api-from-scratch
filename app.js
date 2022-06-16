@@ -81,14 +81,18 @@ app.route("/articles/:articleTitle")
       title: req.params.articleTitle
     }, {
       $set: req.body
-    }, (err) => {!err ? res.send("succesfully updated this article") : res.send(err)})
+    }, (err) => {
+      !err ? res.send("succesfully updated this article") : res.send(err)
+    })
   })
 
-.delete((req,res)=>{
-  Article.deleteOne({title:req.params.articleTitle}, (err)=>{
-    !err?res.send("article succesfully deleted"):res.send(err)
-  })
-})
+  .delete((req, res) => {
+    Article.deleteOne({
+      title: req.params.articleTitle
+    }, (err) => {
+      !err ? res.send("article succesfully deleted") : res.send(err)
+    })
+  });
 
 
 
