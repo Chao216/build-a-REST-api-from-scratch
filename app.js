@@ -24,25 +24,83 @@ const articleSchema = new mongoose.Schema({
 const Article = new mongoose.model("Article", articleSchema);
 
 
-app.route("/articles").get((req, res) => {
-  Article.find({}, (err, result) => {
-    if (!err) {
-      res.send(result)
-    } else {
-      res.send(err)
-    }
+app.route("/articles")
+
+  .get((req, res) => {
+    Article.find({}, (err, result) => {
+      if (!err) {
+        res.send(result)
+      } else {
+        res.send(err)
+      }
+    })
   })
-}).post((req, res) => {
-  const newArticle = new Article({
-    title: req.body.title,
-    content: req.body.content
+
+  .post((req, res) => {
+    const newArticle = new Article({
+      title: req.body.title,
+      content: req.body.content
+    });
+    newArticle.save(err => !err ? res.send("successfully send one article") : res.send(err))
+  })
+
+  .delete((req, res) => {
+    Article.deleteMany({}, (err) => {
+      !err ? res.send("succesfully deleted all articles") : res.send(err)
+    })
   });
-  newArticle.save(err => !err ? res.send("successfully send one article") : res.send(err))
-}).delete((req, res) => {
-  Article.deleteMany({}, (err) => {
-    !err ? res.send("succesfully deleted all articles") : res.send(err)
+
+//------------------------------------------------------------------------------------------------
+app.route("/articles/:articleTitle")
+
+  .get((req, res) => {
+    Article.findOne({
+      title: req.params.articleTitle
+    }, (err, result) => {
+      !err ? res.send(result) : res.send(err)
+    })
   })
-})
+
+  .put((req, res) => {
+    Article.updateOne({
+      title: req.params.articleTitle
+    }, {
+      title: req.body.title,
+      content: req.body.content
+    }, (err) => {
+      if (!err) {
+        res.send("successfully updated this artcile")
+      } else {
+        res.send(err)
+      }
+    })
+  })
+
+  .patch((req, res) => {
+    Article.updateOne({
+      title: req.params.articleTitle
+    }, {
+      $set: req.body
+    }, (err) => {!err ? res.send("succesfully updated this article") : res.send(err)})
+  })
+
+
+
+
+
+
+
+
+// play around with nesting params
+app.route("/first/:firstParam/second/:secondParam/third/:thirdParam")
+
+  .get((req, res) => {
+
+    res.write(req.params.firstParam)
+    res.write(req.params.secondParam)
+    res.write(req.params.thirdParam)
+    res.send()
+  })
 
 
 
