@@ -84,7 +84,11 @@ app.route("/articles/:articleTitle")
     }, (err) => {!err ? res.send("succesfully updated this article") : res.send(err)})
   })
 
-
+.delete((req,res)=>{
+  Article.deleteOne({title:req.params.articleTitle}, (err)=>{
+    !err?res.send("article succesfully deleted"):res.send(err)
+  })
+})
 
 
 
